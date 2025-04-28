@@ -1,0 +1,24 @@
+dataset:
+  name: PDE_KS
+  # pair_id: [1]
+
+# pair_id omitted or set to 'all' to run on all sub-datasets
+
+model:
+  name: KAN
+  version: 1 #Implement KAN2.0 with multiplication nodes later
+  steps: 1000 
+  pred_window: 1
+  lag: 2
+  train_ratio: 0.9
+  batch: -1
+  lr: 0.01
+  optimizer: 'Adam' 
+  base_fun: 'silu' 
+  seed: 42
+  width: [4,4,4]
+  grid: 3
+  update_grid: True
+  k: 3
+  lamb:  0.00001
+  lamb_coef: 0.00001

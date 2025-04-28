@@ -1,0 +1,7 @@
+### Python 3.9.7 or higher
+numpy
+pykan
+torch
+scikit-learn
+pandas 
+tqdm
