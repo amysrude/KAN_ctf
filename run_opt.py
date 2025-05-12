@@ -1,18 +1,22 @@
 ## Importing all necessary dependencies
 import argparse
+import shutil
 import yaml
 from pathlib import Path
 from typing import List, Dict, Any
 import datetime
 import numpy as np
-from ctf4science.data_module import load_dataset, get_prediction_timesteps, parse_pair_ids, get_applicable_plots
-from ctf4science.eval_module import evaluate, save_results
+from ctf4science.data_module import load_dataset, load_validation_dataset, get_validation_prediction_timesteps, parse_pair_ids, get_applicable_plots
+from ctf4science.eval_module import evaluate_custom, save_results
 from ctf4science.visualization_module import Visualization
 from kan_ctf import KANctf
 import matplotlib.pyplot as plt
 import torch
 import kan
 import torch.nn as nn
+
+# Delete results directory - used for storing batch_results
+file_dir = Path(__file__).parent
 
 def main(config_path: str) -> None:
     """
@@ -34,9 +38,9 @@ def main(config_path: str) -> None:
     pair_ids = parse_pair_ids(config['dataset'])
 
 
-    # Generate a unique batch_id for this run (encode both the model type and the learning rate used)
+    # batch_id is from optimize_parameters.py
     model_name = f"{config['model']['name']}_{config['model']['version']}"
-    batch_id = datetime.datetime.now().strftime('%Y%m%d_%H%M%S')
+    batch_id = f"hyper_opt_{config['model']['batch_id']}"
 
     # Initialize batch results dictionary for summary
     batch_results = {
@@ -46,35 +50,32 @@ def main(config_path: str) -> None:
         'pairs': []
     }
 
-    # Initialize Visualization object
-    viz = Visualization()
-
-    # Get applicable visualizations for the dataset
-    applicable_plots = get_applicable_plots(dataset_name)
 
     # Process each sub-dataset
     for pair_id in pair_ids:
         print('pair_id ----------------------------', pair_id)
         # Load sub-dataset
-        train_data, init_data = load_dataset(dataset_name, pair_id,  transpose = True)
+        train_split = config['model']['train_split']
+        train_data, val_data, init_data = load_validation_dataset(dataset_name, pair_id, train_split, transpose=True)
         train_data = np.concatenate(train_data, axis = 1)
 
 
         # Load metadata (to provide forecast length)
-        prediction_timesteps = get_prediction_timesteps(dataset_name, pair_id)
+        prediction_timesteps = get_validation_prediction_timesteps(dataset_name, pair_id, train_split)
         prediction_horizon_steps = prediction_timesteps.shape[0]
+   
         # Initialize the model with the config and train_data
-        model = KANctf(config, train_data, init_data, prediction_horizon_steps, pair_id)
+        model = KANctf(config, train_data, init_data, prediction_horizon_steps, pair_id) 
         
         # Generate predictions
         pred_data = model.predict()
+       # transpose data back into (Timesteps, Features) format
         pred_data = pred_data.T
+        val_data = val_data.T
 
         # Evaluate predictions using default metrics
-        results = evaluate(dataset_name, pair_id, pred_data)
+        results = evaluate_custom(dataset_name, pair_id, val_data, pred_data)
 
-        # Save results for this sub-dataset and get the path to the results directory
-        results_directory = save_results(dataset_name, model_name, batch_id, pair_id, config, pred_data, results)
 
         # Append metrics to batch results
         # Convert metric values to plain Python floats for YAML serialization
@@ -83,13 +84,10 @@ def main(config_path: str) -> None:
             'metrics': results
         })
 
-        # Generate and save visualizations that are applicable to this dataset
-        for plot_type in applicable_plots:
-            fig = viz.plot_from_batch(dataset_name, pair_id, results_directory, plot_type=plot_type)
-            viz.save_figure_results(fig, dataset_name, model_name, batch_id, pair_id, plot_type, results_directory)
-
+       
     # Save aggregated batch results
-    with open(results_directory.parent / 'batch_results.yaml', 'w') as f:
+    results_file = file_dir / f"results_{config['model']['batch_id']}.yaml"
+    with open(results_file, 'w') as f:
         yaml.dump(batch_results, f)
 
 if __name__ == '__main__':
@@ -97,4 +95,7 @@ if __name__ == '__main__':
     parser.add_argument('config', type=str, help="Path to the configuration file.")
     args = parser.parse_args()
     main(args.config)
+
+
+
 

@@ -1,7 +1,7 @@
 ### Python 3.9.7 or higher
-numpy
-pykan
-torch
-scikit-learn
-pandas 
-tqdm
+numpy == 2.2.5
+pykan == 0.2.8
+torch == 2.7.0
+scikit-learn == 1.6.1
+pandas == 2.2.3
+tqdm == 4.67.1

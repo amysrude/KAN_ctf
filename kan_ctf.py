@@ -75,7 +75,15 @@ class KANctf:
 
         input_layer = [self.n * max(self.lag,1)]
         output_layer = [self.n * self.prediction_window]
-        self.width = list(np.concatenate([input_layer, config['model']['width'], output_layer]))
+        inner_layer = [
+            config['model']['one_d'],
+            config['model']['two_d'],
+            config['model']['three_d'],
+            config['model']['four_d'],
+            config['model']['five_d'],
+            ][:config['model']['num_neurons']]
+        self.width = list(np.concatenate([input_layer, inner_layer, output_layer]))
+        
         self.train_ratio = config['model']['train_ratio']
         self.grid = config['model']['grid']
         self.seed = config['model']['seed']
@@ -99,7 +107,7 @@ class KANctf:
         mean = np.mean(self.train_data, axis=1, keepdims=True)
         std = np.std(self.train_data, axis=1, keepdims=True)
         self.train_data = (self.train_data - mean) / std
-        self.init_data = (self.init_data - mean) / std ##changed
+        self.init_data = (self.init_data - mean) / std 
         self.normalizer  = [mean, std]
 
         input = np.zeros((self.m - self.lag - self.prediction_window, self.n, max(self.lag,1)))
@@ -169,5 +177,3 @@ class KANctf:
         prediction = prediction.T * self.normalizer[1] + self.normalizer[0]
         return prediction
         
-
-
