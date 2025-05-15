@@ -1,0 +1,28 @@
+dataset:
+  name: ODE_Lorenz
+  pair_id:
+  - 2
+  
+model:
+  base_fun: silu
+  batch: -1
+  five_d: 1
+  four_d: 9
+  grid: 2
+  k: 2
+  lag: 16
+  lamb: 0.0002915005791313753
+  lamb_coef: 4.7952289353874675e-06
+  lr: 0.010007988921457022
+  name: KAN
+  num_neurons: 2
+  one_d: 5
+  optimizer: Adam
+  pred_window: 1
+  seed: 42
+  steps: 8967
+  three_d: 5
+  train_ratio: 0.9
+  two_d: 8
+  update_grid: true
+  version: 1

@@ -1,0 +1,28 @@
+dataset:
+  name: PDE_KS
+  pair_id:
+  - 1
+  
+model:
+  base_fun: silu
+  batch: 83
+  five_d: 7
+  four_d: 2
+  grid: 3
+  k: 1
+  lag: 1
+  lamb: 1.339293892356481e-06
+  lamb_coef: 2.3554604376359682e-07
+  lr: 0.0008420543707282927
+  name: KAN
+  num_neurons: 4
+  one_d: 2
+  optimizer: Adam
+  pred_window: 1
+  seed: 42
+  steps: 1601
+  three_d: 9
+  train_ratio: 0.9
+  two_d: 2
+  update_grid: false
+  version: 1

@@ -1,11 +1,10 @@
 dataset: 
   name: ODE_Lorenz
-  # pair_id: [1]
 # pair_id omitted or set to 'all' to run on all sub-datasets
 
 model:
   name: KAN
-  version: 1 #Implement KAN2.0 with multiplication nodes later
+  version: 1 
   steps: 2000 
   pred_window: 1
   lag: 4
