@@ -99,6 +99,9 @@ pip install -r requirements.txt
 
 If wanting to hyperparemter tune, make sure your environment contains the optional packages by running `pip install -e .[all]` from the top-level `CTF-for-Science` repository.
 
+## References
+ - Liu, Z., Wang, Y., Vaidya, S., Ruehle, F., Halverson, J., Soljačić, M., ... & Tegmark, M. (2024). Kan: Kolmogorov-arnold networks. arXiv preprint arXiv:2404.19756.
+
 
 ## Notes from Author of KAN for how to hyperparameter tune
 
