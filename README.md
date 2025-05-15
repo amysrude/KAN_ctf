@@ -1,16 +1,16 @@
 # KAN
 
 This directory contains the implementation of the Kolmogorov-Arnold Networks (KAN) for the [CTF for Science](https://github.com/CTF-for-Science) framework. 
-Note: this is the not official code repository of the paper *KAN: Kolmogorov-Arnold Networks* [arXiv link](https://arxiv.org/abs/2404.19756). The official repository can be found here: https://github.com/KindXiaoming/pykan
+Note: this is not the official code repository for the paper *KAN: Kolmogorov-Arnold Networks* ([arXiv link](https://arxiv.org/abs/2404.19756)). The official repository can be found here: https://github.com/KindXiaoming/pykan
 
-Kolmogorov-Arnold Networks (KAN) are inspired by the Kolmogrov-Arnold representation theorem which states that any multivariate continuous function *f* on a bounded domain can be expressed as a finite composition and addition of univariate continuous functions. KAN incorporates a fully-connected network with learnable activation functions on edges (weights) instead of the traditional fixed activation functions on the nodes. Weight parameters are replaced by univariate functions parametrized as a spline. KANs combine aspects of both multi-layer perceptrons (MLP) and splines, allowing it to accurately learn features to a great accuracy. 
+Kolmogorov-Arnold Networks (KAN) are inspired by the Kolmogrov-Arnold representation theorem which states that any multivariate continuous function *f* on a bounded domain can be expressed as a finite composition and addition of univariate continuous functions. KAN incorporates a fully-connected network with learnable activation functions on edges (weights) instead of the traditional fixed activation functions on the nodes. Weight parameters are replaced by univariate functions parametrized as a spline. KANs combine aspects of both multi-layer perceptrons (MLP) and splines, allowing it to accurately learn features with a great accuracy. 
 
-A comparison table from the paper showing the differences and similarties between MLPs and KANs is shown below: 
+The following comparison table from the paper shows the differences and similarties between MLPs and KANs: 
 ![MLPs vs KANs](figures/KANs.png)
 
 
 ## Usage
-To run the model, use the `run.py` script from the **project root** followed by the path to a configuration file. For example:
+To run the model, run the `run.py` script from the **project root** followed by the path to a configuration file. For example:
 
 ```bash
 python models/KAN/run.py models/KAN/config/config_Lorenz.yaml        # to train on all pair_ids
@@ -18,11 +18,11 @@ python models/KAN/run.py models/KAN/config/config_KS.yaml            # to train 
 python models/KAN/run.py models/KAN/config/config_Lorenz_01.yaml     # to train on pair_id == 1
 
 ```
-To run a hyperparameter optimization on all configuration files found in `tuning_config`, run the following command: 
+To run a hyperparameter optimization on all configuration files found in `tuning_config` with a two hour time limit, run the following command: 
 ```bash
 python optimize_parameters.py --metric 'score' --mode 'max' --time-budget-hours 2     
 ```
-To run a hyperparameter optimization on a specific configuration file found in `tuning_config`, run the following command: 
+To run a hyperparameter optimization on a specific configuration file found in `tuning_config` with a two hour time limit, run the following command: 
 ```bash
 python optimize_parameters.py --metric 'score' --mode 'max' --time-budget-hours 2  --config-path './tuning_config/{config_name}.yaml'   
 ```
@@ -32,15 +32,15 @@ python optimize_parameters.py --metric 'score' --mode 'max' --time-budget-hours 
 The following files are used to run the model on any sub-dataset using the hyperparameter configurations determined from baseline testing: 
 - `kan_ctf.py`: Contains the `KANctf` class adapted for the CTF framework
 - `run.py`: Script that runs the model for any sub-dataset combination
-- `config/config_Lorenz_XX.yaml`: Configuration file to run the model on the Lorenz dataset for  `pair_id` (XX)
-- `config/config_KS_XX.yaml`: Configuration file to run the model on the Kuramoto–Sivashinsky dataset for  `pair_id` (XX)
+- `config/config_Lorenz_XX.yaml`: Configuration file to run the model on the Lorenz sub-datasets for  `pair_id` (XX)
+- `config/config_KS_XX.yaml`: Configuration file to run the model on the Kuramoto–Sivashinsky sub-datasets for  `pair_id` (XX)
 
-The following files arre used to hyperparameter tune the model using `Ray Tune`:
+The following files are used to hyperparameter tune the model using `Ray Tune`:
 - `kan_ctf.py`: Contains the `KANctf` class adapted for the CTF framework
 - `run_opt.py`: Script that runs the model for any sub-dataset combination
 - `optimize_parameters.py`: Script for tuning the model hyperparameters
-- `tuning_config/config_Lorenz_Official_XX.yaml`: Configuration file to tune the hyperparemters for the Lorez sub-dataset corresponding to  `pair_id` (XX)
-- `tuning_config/config_KS_Official_XX.yaml`: Configuration file to tune the hyperparemters for the Kuramoto–Sivashinsky sub-dataset corresponding to  `pair_id` (XX)
+- `tuning_config/config_Lorenz_Official_X.yaml`: Configuration file to tune the hyperparemters for the Lorez sub-datasets corresponding to  `pair_id` (X)
+- `tuning_config/config_KS_Official_X.yaml`: Configuration file to tune the hyperparemters for the Kuramoto–Sivashinsky sub-datasets corresponding to  `pair_id` (X)
 
 ## Configuration Files
 
@@ -102,7 +102,7 @@ If wanting to hyperparemter tune, make sure your environment contains the option
 
 ## Notes from Author of KAN for how to hyperparameter tune
 
-## Advice on hyperparameter tuning
+**Advice on hyperparameter tuning**
 Many intuition about MLPs and other networks may not directly transfer to KANs. So how can I tune the hyperparameters effectively? Here is my general advice based on my experience playing with the problems reported in the paper. Since these problems are relatively small-scale and science-oriented, it is likely that my advice is not suitable to your case. But I want to at least share my experience such that users can have better clues where to start and what to expect from tuning hyperparameters.
 
 * Start from a simple setup (small KAN shape, small grid size, small data, no reguralization `lamb=0`). This is very different from MLP literature, where people by default use widths of order `O(10^2)` or higher. For example, if you have a task with 5 inputs and 1 outputs, I would try something as simple as `KAN(width=[5,1,1], grid=3, k=3)`. If it doesn't work, I would gradually first increase width. If that still doesn't work, I would consider increasing depth. You don't need to be this extreme, if you have better understanding about the complexity of your task.
