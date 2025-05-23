@@ -6,8 +6,8 @@ dataset:
 model:
   base_fun: silu
   batch: 80
-  five_d: 8
-  four_d: 9
+  five_dim: 8
+  four_dim: 9
   grid: 4
   k: 3
   lag: 3
@@ -15,14 +15,14 @@ model:
   lamb_coef: 1.1783847791720347e-07
   lr: 0.0016733147449291184
   name: KAN
-  num_neurons: 2
-  one_d: 4
+  num_layers: 2
+  one_dim: 4
   optimizer: Adam
   pred_window: 1
   seed: 42
   steps: 1817
-  three_d: 7
+  three_dim: 7
   train_ratio: 0.9
-  two_d: 3
+  two_dim: 3
   update_grid: false
   version: 1

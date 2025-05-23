@@ -19,9 +19,9 @@ model:
   k: 3
   lamb:  0.00001
   lamb_coef: 0.00001
-  num_neurons: 3
-  one_d: 2
-  two_d: 2
-  three_d: 3
-  four_d: 2
-  five_d: 3
+  num_layers: 3
+  one_dim: 2
+  two_dim: 2
+  three_dim: 3
+  four_dim: 2
+  five_dim: 3

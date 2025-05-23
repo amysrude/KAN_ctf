@@ -14,12 +14,12 @@ model:
   optimizer: 'Adam' 
   base_fun: 'silu' 
   seed: 42
-  num_neurons: 3
-  one_d: 4
-  two_d: 4
-  three_d: 4
-  four_d: 2
-  five_d: 3
+  num_layers: 3
+  one_dim: 4
+  two_dim: 4
+  three_dim: 4
+  four_dim: 2
+  five_dim: 3
   grid: 3
   update_grid: True
   k: 3
