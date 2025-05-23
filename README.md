@@ -71,11 +71,11 @@ model:
   lamb:  0.00001      # (float) Overall penalty strength
   lamb_coef: 0.00001  # (float) Coefficient magnitude penalty strength
   num_layers: 3       # (int)   Number of inner layers
-  one_dim: 2            # (int)   Dimension of first inner layer
-  two_dim: 2            # (int)   Dimension of second inner layer
-  three_dim: 3          # (int)   Dimension of third inner layer
-  four_dim: 2           # (int)   Dimension of fourth inner layer
-  five_dim: 3           # (int)   Dimension of fifth inner layer
+  one_dim: 2          # (int)   Dimension of first inner layer
+  two_dim: 2          # (int)   Dimension of second inner layer
+  three_dim: 3        # (int)   Dimension of third inner layer
+  four_dim: 2         # (int)   Dimension of fourth inner layer
+  five_dim: 3         # (int)   Dimension of fifth inner layer
 
 ```
 
