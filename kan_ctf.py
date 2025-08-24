@@ -139,6 +139,7 @@ class KANctf:
         print('width', self.width) 
         data = self.get_data()
         model = KAN(width= self.width, grid=self.grid, k=self.k, seed=self.seed, device= self.device, base_fun = self.base_fun)
+        model.to(self.device)
         model.fit(
             dataset = data,
             lamb_coef = self.lamb_coef,
@@ -162,16 +163,16 @@ class KANctf:
         init_data = self.init_data.T
   
         if self.pair_id == 2 or self.pair_id ==4:
-            input = torch.tensor(init_data).type(self.dtype)
+            input = torch.tensor(init_data).type(self.dtype).to(self.device)
             print(f'------------ Working on Prediction for Pair ID {self.pair_id}------------')
             with torch.no_grad():
-                prediction = model(input).numpy()
+                prediction = model(input).cpu().numpy()
         else:
             print(f'------------ Working on Prediction for Pair ID {self.pair_id}------------')    
             for i in range(self.prediction_horizon_steps):                
-                input = torch.tensor(init_data.reshape(1,-1)).type(self.dtype)
+                input = torch.tensor(init_data.reshape(1,-1)).type(self.dtype).to(self.device)
                 with torch.no_grad():
-                    pred = model(input).numpy()[0]              
+                    pred = model(input).cpu().numpy()[0]              
                 prediction[i,:] = pred[:self.n]
                 init_data = np.vstack([init_data[1:,:], pred[:self.n].reshape(1,self.n)])
 
