@@ -155,7 +155,7 @@ class KANctf:
         return model
     
     def predict(self):
-        """
+        """K
         Generate predictions based on the KAN model
         """
         model = self.train()
